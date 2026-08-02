@@ -62,7 +62,9 @@ MAX_RETRIES = 3
 
 # Optional scraping-API passthrough (set as a GitHub Actions secret).
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "").strip()
-SCRAPER_API_PROVIDER = os.environ.get("SCRAPER_API_PROVIDER", "scraperapi").strip().lower()
+# Use `or` (not a get-default) so an env var present-but-empty — which is what
+# GitHub injects for an unset repo variable — still falls back to the default.
+SCRAPER_API_PROVIDER = (os.environ.get("SCRAPER_API_PROVIDER") or "scraperapi").strip().lower()
 
 
 def build_proxy_url(url: str):
@@ -115,8 +117,11 @@ def fetch_html_via_api(url: str):
             if resp.status_code in (429, 500, 502, 503):
                 time.sleep(3 * (attempt + 1))
                 continue
+            # Surface auth/quota errors (401/403/etc.) so they're diagnosable.
+            print(f"    API HTTP {resp.status_code}: {resp.text[:120].strip()}")
             return None
-        except requests.RequestException:
+        except requests.RequestException as exc:
+            print(f"    API request error: {str(exc)[:120]}")
             time.sleep(3 * (attempt + 1))
     return None
 
