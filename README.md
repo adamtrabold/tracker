@@ -1,6 +1,6 @@
-# Kärcher K5 Power Control — Price Tracker
+# Kärcher K5 Power Control CHK — Price Tracker
 
-A hands-off website that tracks the price of the **Kärcher K5 Power Control**
+A hands-off website that tracks the price of the **Kärcher K5 Power Control CHK** (Car & Home Kit)
 pressure washer across US retailers. Prices are gathered automatically on a
 schedule — there's nothing to update by hand.
 

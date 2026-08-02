@@ -132,8 +132,9 @@ _HTML_SELECTORS = {
     "lowes": ['[data-testid="price"]', ".screen-reader", ".main-price"],
     "walmart": ['[itemprop="price"]', '[data-testid="price-wrap"] span', 'span[data-automation-id="product-price"]'],
     "target": ['[data-test="product-price"]'],
-    "acehardware": [".product-price", ".price"],
-    "tractorsupply": [".price", '[data-at="product-price"]'],
+    "bestbuy": ['[data-testid="customer-price"]', ".priceView-customer-price span", ".pricing-price__regular-price"],
+    "nfm": ['[itemprop="price"]', ".product-price", ".price"],
+    "qvc": [".ProductPrice-currentPrice", '[data-test="product-price"]', ".price"],
     "karcher": [".product-detail__price", ".price"],
 }
 
