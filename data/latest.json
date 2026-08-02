@@ -10,7 +10,7 @@
       700
     ]
   },
-  "updated_at": "2026-08-02T23:33:49+00:00",
+  "updated_at": "2026-08-02T23:52:14+00:00",
   "retailers": [
     {
       "retailer_id": "karcher",
@@ -20,7 +20,8 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-02T23:31:25+00:00"
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''"
     },
     {
       "retailer_id": "amazon",
@@ -30,9 +31,8 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-02T23:31:31+00:00",
-      "last_known_price": 109.99,
-      "last_known_at": "2026-08-02T23:20:42+00:00"
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''"
     },
     {
       "retailer_id": "homedepot",
@@ -42,7 +42,8 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-02T23:31:37+00:00"
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''"
     },
     {
       "retailer_id": "lowes",
@@ -52,7 +53,8 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-02T23:31:52+00:00"
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''"
     },
     {
       "retailer_id": "walmart",
@@ -62,7 +64,8 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-02T23:32:08+00:00"
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''"
     },
     {
       "retailer_id": "target",
@@ -72,11 +75,8 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-02T23:32:11+00:00",
-      "rejected_price": 249.99,
-      "reject_reason": "outside expected range 330-700",
-      "last_known_price": 249.99,
-      "last_known_at": "2026-08-02T23:21:19+00:00"
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''"
     },
     {
       "retailer_id": "bestbuy",
@@ -86,17 +86,21 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-02T23:32:17+00:00"
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''"
     },
     {
       "retailer_id": "nfm",
       "name": "Nebraska Furniture Mart",
       "url": "https://www.nfm.com/karcher-k5-power-control-chk-2000-psi-electric-pressure-washer-w-car--home-kit-65358814/65358814.html",
       "currency": "USD",
-      "price": 499.99,
-      "status": "ok",
-      "method": "json-ld",
-      "timestamp": "2026-08-02T23:33:45+00:00"
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''",
+      "last_known_price": 499.99,
+      "last_known_at": "2026-08-02T23:33:45+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -106,7 +110,8 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-02T23:33:46+00:00"
+      "timestamp": "2026-08-02T23:52:14+00:00",
+      "error": "Unknown SCRAPER_API_PROVIDER: ''"
     }
   ]
 }
