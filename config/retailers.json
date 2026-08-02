@@ -1,0 +1,66 @@
+{
+  "product": {
+    "name": "Kärcher K5 Power Control",
+    "model": "K5 Power Control",
+    "brand": "Kärcher",
+    "market": "US"
+  },
+  "retailers": [
+    {
+      "id": "karcher",
+      "name": "Kärcher (Official US Store)",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.kaercher.com/us/home-garden/pressure-washers/k5-power-control-15806340.html"
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.amazon.com/Karcher-Power-Control-Electric-Pressure/dp/B08P3MYP8Q"
+    },
+    {
+      "id": "homedepot",
+      "name": "The Home Depot",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.homedepot.com/p/Karcher-K5-Power-Control-2000-PSI-1-4-GPM-Electric-Pressure-Washer/315054900"
+    },
+    {
+      "id": "lowes",
+      "name": "Lowe's",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.lowes.com/pd/Karcher-K5-Power-Control-2000-PSI-Electric-Pressure-Washer/5013426291"
+    },
+    {
+      "id": "walmart",
+      "name": "Walmart",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.walmart.com/ip/Karcher-K5-Power-Control-Electric-Pressure-Washer/887039999"
+    },
+    {
+      "id": "target",
+      "name": "Target",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.target.com/p/karcher-k5-power-control-electric-pressure-washer/-/A-88888888"
+    },
+    {
+      "id": "acehardware",
+      "name": "Ace Hardware",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.acehardware.com/departments/outdoor-living/pressure-washers/electric-pressure-washers/karcher-k5-power-control"
+    },
+    {
+      "id": "tractorsupply",
+      "name": "Tractor Supply",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.tractorsupply.com/tsc/product/karcher-k5-power-control-electric-pressure-washer"
+    }
+  ]
+}
