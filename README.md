@@ -31,14 +31,14 @@ Everything runs on free GitHub infrastructure: **Actions** does the scraping,
 | `scraper/extractors.py` | Price-extraction logic (JSON-LD, meta tags, HTML fallback). |
 | `data/latest.json` | Current price per retailer (the site reads this). |
 | `data/history.json` | Append-only price history (powers the chart). |
-| `site/` | Static website (`index.html`, `app.js`, `styles.css`). |
+| `index.html`, `app.js`, `styles.css` | Static website, served from the repo root. |
 | `.github/workflows/scrape.yml` | The scheduled scrape + auto-commit. |
 
 ## One-time setup
 
 1. **Enable GitHub Pages**: repo **Settings → Pages → Build and deployment →
-   Deploy from a branch**, pick this branch and the root folder (`/`). The site
-   is then served at `https://<you>.github.io/tracker/site/`.
+   Deploy from a branch**, pick the **`main`** branch and the root folder (`/`).
+   The site is then served at `https://<you>.github.io/tracker/`.
 2. **Enable Actions write access** (if not already): **Settings → Actions →
    General → Workflow permissions → Read and write permissions**. This lets the
    scraper commit updated prices.
@@ -66,7 +66,7 @@ python -m playwright install chromium   # optional; only used as a fallback
 python scraper/scrape.py                # writes data/latest.json + data/history.json
 
 # preview the site
-python -m http.server --directory site 8000   # then open http://localhost:8000
+python -m http.server 8000                     # then open http://localhost:8000
 ```
 
 ## Honest limitations

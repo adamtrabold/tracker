@@ -3,7 +3,7 @@
    and renders the table, the "lowest price" card, and the history chart.
    Pure static; no build step. */
 
-const DATA_BASE = "../data";
+const DATA_BASE = "data";
 
 async function loadJSON(path, fallback) {
   try {
