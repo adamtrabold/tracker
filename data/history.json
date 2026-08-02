@@ -1,17 +1,5 @@
 [
   {
-    "retailer_id": "amazon",
-    "price": 109.99,
-    "currency": "USD",
-    "timestamp": "2026-08-02T23:20:42+00:00"
-  },
-  {
-    "retailer_id": "target",
-    "price": 249.99,
-    "currency": "USD",
-    "timestamp": "2026-08-02T23:21:19+00:00"
-  },
-  {
     "retailer_id": "nfm",
     "price": 499.99,
     "currency": "USD",
