@@ -42,7 +42,20 @@ Everything runs on free GitHub infrastructure: **Actions** does the scraping,
 2. **Enable Actions write access** (if not already): **Settings → Actions →
    General → Workflow permissions → Read and write permissions**. This lets the
    scraper commit updated prices.
-3. That's it. The scraper runs every 6 hours, or you can trigger it manually
+3. **Add a scraping-API key** (strongly recommended). Big US retailers (Home
+   Depot, Lowe's, Amazon, Walmart, Best Buy, Target) block automated requests
+   from datacenter IPs with a 403, so a plain fetch can't read their prices.
+   A scraping API rotates residential IPs and renders the page for you:
+   - Get a free key from [ScraperAPI](https://www.scraperapi.com/) (free tier
+     ~1,000 requests/month — plenty for a 6-hourly run over ~9 retailers).
+   - Add it under **Settings → Secrets and variables → Actions → New repository
+     secret**, named `SCRAPER_API_KEY`.
+   - (Optional) To use a different provider, add a repo **variable**
+     `SCRAPER_API_PROVIDER` = `scrapingbee` or `zenrows` (default `scraperapi`).
+
+   Without a key the tracker still runs, but only non-blocking sites will
+   report prices.
+4. That's it. The scraper runs every 6 hours, or you can trigger it manually
    from the **Actions** tab → *Scrape prices* → *Run workflow*.
 
 ## Adjusting what's tracked
@@ -63,6 +76,9 @@ Edit `config/retailers.json`. Each retailer is one entry:
 ```bash
 pip install -r scraper/requirements.txt
 python -m playwright install chromium   # optional; only used as a fallback
+
+# optional: route through a scraping API to get past retailer blocks
+export SCRAPER_API_KEY=your_key_here    # e.g. from scraperapi.com
 python scraper/scrape.py                # writes data/latest.json + data/history.json
 
 # preview the site
@@ -77,10 +93,11 @@ python -m http.server 8000                     # then open http://localhost:8000
   break an individual retailer. When that happens, that retailer simply shows
   **unavailable** and keeps its last known price — the rest of the site keeps
   working.
-- Some retailers (Amazon especially) block automated requests from
-  datacenter/CI IP addresses, so their prices may be intermittent from GitHub
-  Actions. Coverage is best-effort by design; the config makes it easy to
-  add/remove sites.
-- Seeded product URLs are best guesses and may need correcting to the exact
-  listing you care about — that's the one bit of setup worth a quick check.
+- Big retailers block datacenter/CI IPs with a 403, so from GitHub Actions a
+  plain fetch can't read most of them. The **scraping-API key** (setup step 3)
+  fixes this by routing through rotating residential IPs — with it configured,
+  coverage is reliable; without it, only non-blocking sites report prices.
+- A `config.product.expected_price_range` guard rejects implausible values
+  (e.g. an accessory price a fallback selector might grab), so a wrong number
+  never shows as the lowest price. Adjust the range if you track a different SKU.
 - Always confirm the price on the retailer's own site before buying.

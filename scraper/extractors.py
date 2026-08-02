@@ -127,7 +127,14 @@ def meta_price(html: str):
 # Retailer-specific CSS selectors, tried in order. Kept intentionally small and
 # easy to extend — add a selector here when a retailer changes its markup.
 _HTML_SELECTORS = {
-    "amazon": [".a-price .a-offscreen", "#priceblock_ourprice", "#corePrice_feature_div .a-offscreen"],
+    # Target the buy-box core only — a bare ".a-offscreen" matches accessory and
+    # "buy it with" prices too, which produced a wrong $109.99 in testing.
+    "amazon": [
+        "#corePrice_feature_div .a-price .a-offscreen",
+        "#corePriceDisplay_desktop_feature_div .a-price .a-offscreen",
+        "#price_inside_buybox",
+        "#priceblock_ourprice",
+    ],
     "homedepot": ['[data-testid="price"]', ".price-format__main-price", ".price"],
     "lowes": ['[data-testid="price"]', ".screen-reader", ".main-price"],
     "walmart": ['[itemprop="price"]', '[data-testid="price-wrap"] span', 'span[data-automation-id="product-price"]'],

@@ -9,17 +9,31 @@ price, and writes:
 Design goals:
   - Never crash the whole run because one retailer fails (per-retailer guard).
   - Prefer stable structured data (JSON-LD) over brittle HTML scraping.
-  - Fall back to a headless browser only when a plain HTTP fetch yields nothing.
   - On failure, record status="unavailable" and preserve the last known price.
+
+Fetch strategy:
+  - If a scraping-API key is configured (env SCRAPER_API_KEY), every request is
+    routed through that service, which rotates residential IPs and renders JS
+    server-side. This is what gets past the big retailers' 403 anti-bot blocks.
+    Set SCRAPER_API_PROVIDER to scraperapi (default), scrapingbee, or zenrows.
+  - With no key, it falls back to a direct HTTP fetch plus a headless-browser
+    render — free, but blocked by most big-box retailers.
+
+Sanity guard:
+  - config.product.expected_price_range = [min, max] rejects obviously-wrong
+    scrapes (e.g. an accessory price picked up by an HTML fallback), so a bad
+    value never shows on the site as the lowest price.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 import requests
 
@@ -43,7 +57,35 @@ HEADERS = {
 }
 
 REQUEST_TIMEOUT = 25
+API_TIMEOUT = 75  # scraping APIs render JS server-side, so allow more time
 MAX_RETRIES = 3
+
+# Optional scraping-API passthrough (set as a GitHub Actions secret).
+SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "").strip()
+SCRAPER_API_PROVIDER = os.environ.get("SCRAPER_API_PROVIDER", "scraperapi").strip().lower()
+
+
+def build_proxy_url(url: str):
+    """Wrap a target URL in the configured scraping-API request URL."""
+    if not SCRAPER_API_KEY:
+        return None
+    target = quote(url, safe="")
+    if SCRAPER_API_PROVIDER == "scraperapi":
+        return (
+            f"https://api.scraperapi.com/?api_key={SCRAPER_API_KEY}"
+            f"&url={target}&render=true&country_code=us"
+        )
+    if SCRAPER_API_PROVIDER == "scrapingbee":
+        return (
+            f"https://app.scrapingbee.com/api/v1/?api_key={SCRAPER_API_KEY}"
+            f"&url={target}&render_js=true&country_code=us"
+        )
+    if SCRAPER_API_PROVIDER == "zenrows":
+        return (
+            f"https://api.zenrows.com/v1/?apikey={SCRAPER_API_KEY}"
+            f"&url={target}&js_render=true&premium_proxy=true&proxy_country=us"
+        )
+    raise ValueError(f"Unknown SCRAPER_API_PROVIDER: {SCRAPER_API_PROVIDER!r}")
 
 
 def now_iso() -> str:
@@ -57,6 +99,26 @@ def load_json(path: Path, default):
         except (ValueError, OSError):
             pass
     return default
+
+
+def fetch_html_via_api(url: str):
+    """Fetch through the configured scraping API (rotating IP + JS render)."""
+    proxy_url = build_proxy_url(url)
+    if not proxy_url:
+        return None
+    for attempt in range(MAX_RETRIES):
+        try:
+            resp = requests.get(proxy_url, timeout=API_TIMEOUT)
+            if resp.status_code == 200 and resp.text:
+                return resp.text
+            # API transient errors (rate limit / upstream retry) -> back off.
+            if resp.status_code in (429, 500, 502, 503):
+                time.sleep(3 * (attempt + 1))
+                continue
+            return None
+        except requests.RequestException:
+            time.sleep(3 * (attempt + 1))
+    return None
 
 
 def fetch_html(url: str):
@@ -100,8 +162,12 @@ def fetch_html_rendered(url: str):
         return None
 
 
-def scrape_retailer(retailer: dict):
-    """Return a result dict for one retailer (always returns; never raises)."""
+def scrape_retailer(retailer: dict, price_range=None):
+    """Return a result dict for one retailer (always returns; never raises).
+
+    price_range: optional (min, max) sanity bounds; a scraped price outside the
+    range is rejected as likely-wrong rather than shown.
+    """
     rid = retailer["id"]
     result = {
         "retailer_id": rid,
@@ -114,18 +180,35 @@ def scrape_retailer(retailer: dict):
         "timestamp": now_iso(),
     }
     try:
-        html = fetch_html(retailer["url"])
         price = currency = method = None
-        if html:
-            price, currency, method = extract_price(html, rid)
 
-        # Only spin up the browser if the cheap path found nothing.
-        if price is None:
-            rendered = fetch_html_rendered(retailer["url"])
-            if rendered:
-                price, currency, method = extract_price(rendered, rid)
+        if SCRAPER_API_KEY:
+            # Route through the scraping API: rotates IPs + renders JS, so this
+            # single call replaces both the direct fetch and the browser render.
+            html = fetch_html_via_api(retailer["url"])
+            if html:
+                price, currency, method = extract_price(html, rid)
                 if method:
-                    method = f"{method}+rendered"
+                    method = f"{method}+api"
+        else:
+            html = fetch_html(retailer["url"])
+            if html:
+                price, currency, method = extract_price(html, rid)
+            # Only spin up the browser if the cheap path found nothing.
+            if price is None:
+                rendered = fetch_html_rendered(retailer["url"])
+                if rendered:
+                    price, currency, method = extract_price(rendered, rid)
+                    if method:
+                        method = f"{method}+rendered"
+
+        # Sanity guard: drop implausible values (e.g. an accessory price).
+        if price is not None and price_range:
+            lo, hi = price_range
+            if not (lo <= price <= hi):
+                result["rejected_price"] = price
+                result["reject_reason"] = f"outside expected range {lo}-{hi}"
+                price = None
 
         if price is not None:
             result.update(
@@ -151,9 +234,13 @@ def main() -> int:
     prev_prices = {r["retailer_id"]: r for r in previous_latest.get("retailers", [])}
     history = load_json(HISTORY_PATH, [])
 
+    price_range = config.get("product", {}).get("expected_price_range")
+    mode = f"scraping API ({SCRAPER_API_PROVIDER})" if SCRAPER_API_KEY else "direct fetch"
+    print(f"Fetch mode: {mode}\n")
+
     results = []
     for retailer in config["retailers"]:
-        res = scrape_retailer(retailer)
+        res = scrape_retailer(retailer, price_range=price_range)
 
         # Preserve last known price when this run failed to fetch one.
         if res["status"] != "ok":

@@ -4,7 +4,8 @@
     "model": "K5 Power Control CHK",
     "sku": "1.324-571.0",
     "brand": "Kärcher",
-    "market": "US"
+    "market": "US",
+    "expected_price_range": [330, 700]
   },
   "retailers": [
     {

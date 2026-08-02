@@ -34,6 +34,12 @@ jobs:
         run: python -m playwright install --with-deps chromium
 
       - name: Run scraper
+        env:
+          # Add these as repo secrets (Settings → Secrets and variables → Actions).
+          # With SCRAPER_API_KEY set, requests route through the scraping API and
+          # get past retailer anti-bot blocks. Without it, direct fetch is used.
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+          SCRAPER_API_PROVIDER: ${{ vars.SCRAPER_API_PROVIDER }}
         run: python scraper/scrape.py
 
       - name: Commit updated data
