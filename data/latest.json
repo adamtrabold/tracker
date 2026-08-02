@@ -1,10 +1,91 @@
 {
   "product": {
-    "name": "Kärcher K5 Power Control",
+    "name": "K\u00e4rcher K5 Power Control",
     "model": "K5 Power Control",
-    "brand": "Kärcher",
+    "brand": "K\u00e4rcher",
     "market": "US"
   },
-  "updated_at": null,
-  "retailers": []
+  "updated_at": "2026-08-02T23:15:54+00:00",
+  "retailers": [
+    {
+      "retailer_id": "karcher",
+      "name": "K\u00e4rcher (Official US Store)",
+      "url": "https://www.kaercher.com/us/home-garden/pressure-washers/k5-power-control-15806340.html",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:14:58+00:00"
+    },
+    {
+      "retailer_id": "amazon",
+      "name": "Amazon",
+      "url": "https://www.amazon.com/Karcher-Power-Control-Electric-Pressure/dp/B08P3MYP8Q",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:15:03+00:00"
+    },
+    {
+      "retailer_id": "homedepot",
+      "name": "The Home Depot",
+      "url": "https://www.homedepot.com/p/Karcher-K5-Power-Control-2000-PSI-1-4-GPM-Electric-Pressure-Washer/315054900",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:15:06+00:00"
+    },
+    {
+      "retailer_id": "lowes",
+      "name": "Lowe's",
+      "url": "https://www.lowes.com/pd/Karcher-K5-Power-Control-2000-PSI-Electric-Pressure-Washer/5013426291",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:15:22+00:00"
+    },
+    {
+      "retailer_id": "walmart",
+      "name": "Walmart",
+      "url": "https://www.walmart.com/ip/Karcher-K5-Power-Control-Electric-Pressure-Washer/887039999",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:15:38+00:00"
+    },
+    {
+      "retailer_id": "target",
+      "name": "Target",
+      "url": "https://www.target.com/p/karcher-k5-power-control-electric-pressure-washer/-/A-88888888",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:15:42+00:00"
+    },
+    {
+      "retailer_id": "acehardware",
+      "name": "Ace Hardware",
+      "url": "https://www.acehardware.com/departments/outdoor-living/pressure-washers/electric-pressure-washers/karcher-k5-power-control",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:15:46+00:00"
+    },
+    {
+      "retailer_id": "tractorsupply",
+      "name": "Tractor Supply",
+      "url": "https://www.tractorsupply.com/tsc/product/karcher-k5-power-control-electric-pressure-washer",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-02T23:15:50+00:00"
+    }
+  ]
 }
