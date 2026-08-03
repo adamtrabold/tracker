@@ -167,6 +167,37 @@ def fetch_html_via_api(url: str, render: bool = False):
     return None
 
 
+def fetch_html_stealth(url: str):
+    """Fetch with a real browser TLS/HTTP2 fingerprint via curl_cffi.
+
+    Plain `requests` has a fingerprint that anti-bot systems flag instantly;
+    curl_cffi impersonates Chrome, which gets past fingerprint-based blocks
+    (esp. from a residential IP). Optional — skipped if curl_cffi isn't
+    installed. Returns HTML or None.
+    """
+    try:
+        from curl_cffi import requests as cffi
+    except ImportError:
+        return None
+    for attempt in range(2):
+        try:
+            resp = cffi.get(
+                url, headers={"Accept-Language": HEADERS["Accept-Language"]},
+                impersonate="chrome", timeout=REQUEST_TIMEOUT,
+            )
+            if resp.status_code == 200 and resp.text:
+                return resp.text
+            if resp.status_code in (403, 429, 503) and attempt == 0:
+                time.sleep(2)
+                continue
+            return None
+        except Exception:
+            if attempt == 0:
+                time.sleep(2)
+                continue
+    return None
+
+
 def fetch_html(url: str):
     """Plain HTTP fetch with retry/backoff. Returns HTML text or None."""
     for attempt in range(MAX_RETRIES):
@@ -230,9 +261,16 @@ def scrape_direct(retailer: dict):
                 if method:
                     method = f"{method}+api-render"
     else:
-        html = fetch_html(retailer["url"])
+        # 1) stealth (real-browser TLS fingerprint), 2) plain fetch,
+        # 3) headless browser — first that yields a price wins.
+        html = fetch_html_stealth(retailer["url"])
+        tag = "+stealth"
+        if not html:
+            html, tag = fetch_html(retailer["url"]), ""
         if html:
             price, currency, method = extract_price(html, rid)
+            if method and tag:
+                method = f"{method}{tag}"
         if price is None:
             rendered = fetch_html_rendered(retailer["url"])
             if rendered:

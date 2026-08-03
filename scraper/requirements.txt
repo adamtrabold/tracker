@@ -1,3 +1,6 @@
 requests>=2.31
 beautifulsoup4>=4.12
 playwright>=1.44
+# Optional but recommended: real-browser TLS fingerprint to get past
+# fingerprint-based anti-bot blocks (esp. from a residential/self-hosted IP).
+curl_cffi>=0.7

@@ -1,0 +1,67 @@
+name: Scrape prices (self-hosted)
+
+# Same scraper, but runs on YOUR self-hosted runner — i.e. from a residential
+# home IP instead of GitHub's datacenter IP. That residential IP is what gets
+# past the big-box retailers' IP-reputation blocks for free, letting the
+# "direct" source work for retailers that a datacenter IP can't reach.
+#
+# Setup: see docs/self-hosted-runner.md. This workflow is a no-op unless you
+# have registered a self-hosted runner on the repo.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scrape
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    # Requires a runner you registered (Settings → Actions → Runners).
+    runs-on: [self-hosted]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scraper/requirements.txt
+
+      - name: Install Chromium for Playwright
+        run: python -m playwright install chromium
+
+      - name: Run scraper
+        env:
+          # Optional: keys still work here too. But on a residential IP the
+          # "direct" source can reach retailers a datacenter IP cannot, so you
+          # may not need SerpApi at all — try switching retailers to
+          # source:"direct" in config/retailers.json.
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
+          SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
+          SCRAPER_API_PROVIDER: ${{ vars.SCRAPER_API_PROVIDER }}
+          SCRAPER_API_PREMIUM: ${{ vars.SCRAPER_API_PREMIUM }}
+        run: python scraper/scrape.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "price-tracker-bot"
+          git config user.email "actions@github.com"
+          git add data/latest.json data/history.json
+          if git diff --staged --quiet; then
+            echo "No price changes."
+          else
+            git commit -m "Update prices - self-hosted ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            git push
+          fi

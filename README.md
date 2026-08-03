@@ -114,3 +114,14 @@ python -m http.server 8000                     # then open http://localhost:8000
 - Free API tiers (SerpApi 250 searches/mo, Best Buy free) comfortably cover a
   6-hourly schedule; the cadence lives in `.github/workflows/scrape.yml`.
 - Always confirm the price on the retailer's own site before buying.
+
+## Alternative: scrape it yourself from a home IP (no APIs)
+
+If you'd rather not use SerpApi and want to scrape the big-box sites directly,
+the blocker is that GitHub's runners use datacenter IPs, which those sites
+reject. Running from a **residential IP** (a machine at home) gets past that for
+free. The scraper already impersonates a real browser's TLS fingerprint
+(`curl_cffi`) to help, and there's a ready-made self-hosted workflow. See
+[`docs/self-hosted-runner.md`](docs/self-hosted-runner.md). (A DIY *proxy*
+isn't worth it — residential IPs must be rented, which just re-creates a paid
+scraping API.)
