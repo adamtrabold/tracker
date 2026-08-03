@@ -8,20 +8,18 @@
     "expected_price_range": [
       330,
       700
+    ],
+    "serpapi_query": "Karcher K5 Power Control CHK Car Home Kit pressure washer",
+    "variant_match_terms": [
+      "chk",
+      "car & home",
+      "car and home",
+      "car home",
+      "1.324-571"
     ]
   },
-  "updated_at": "2026-08-03T00:20:21+00:00",
+  "updated_at": "2026-08-03T02:15:30+00:00",
   "retailers": [
-    {
-      "retailer_id": "karcher",
-      "name": "K\u00e4rcher (Official US Store)",
-      "url": "https://www.kaercher.com/us/home-garden/electric-pressure-washers/k-5-power-control-car-home-13245710.html",
-      "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-08-03T00:15:23+00:00"
-    },
     {
       "retailer_id": "amazon",
       "name": "Amazon",
@@ -30,7 +28,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-03T00:15:23+00:00"
+      "timestamp": "2026-08-03T02:11:44+00:00"
     },
     {
       "retailer_id": "homedepot",
@@ -40,7 +38,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-03T00:15:23+00:00"
+      "timestamp": "2026-08-03T02:11:44+00:00"
     },
     {
       "retailer_id": "lowes",
@@ -50,7 +48,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-03T00:15:23+00:00"
+      "timestamp": "2026-08-03T02:11:44+00:00"
     },
     {
       "retailer_id": "walmart",
@@ -60,7 +58,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-03T00:15:34+00:00"
+      "timestamp": "2026-08-03T02:11:44+00:00"
     },
     {
       "retailer_id": "target",
@@ -70,9 +68,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-03T00:15:38+00:00",
-      "rejected_price": 249.99,
-      "reject_reason": "outside expected range 330-700"
+      "timestamp": "2026-08-03T02:11:44+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -82,7 +78,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-03T00:16:37+00:00"
+      "timestamp": "2026-08-03T02:11:44+00:00"
     },
     {
       "retailer_id": "nfm",
@@ -92,7 +88,17 @@
       "price": 499.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-03T00:17:33+00:00"
+      "timestamp": "2026-08-03T02:11:44+00:00"
+    },
+    {
+      "retailer_id": "karcher",
+      "name": "K\u00e4rcher (Official US Store)",
+      "url": "https://www.kaercher.com/us/home-garden/electric-pressure-washers/k-5-power-control-car-home-13245710.html",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-03T02:11:44+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -102,7 +108,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-03T00:17:34+00:00"
+      "timestamp": "2026-08-03T02:11:44+00:00"
     }
   ]
 }
