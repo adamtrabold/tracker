@@ -36,12 +36,13 @@ jobs:
       - name: Run scraper
         env:
           # Add these as repo secrets (Settings → Secrets and variables → Actions).
-          # With SCRAPER_API_KEY set, requests route through the scraping API and
-          # get past retailer anti-bot blocks. Without it, direct fetch is used.
+          # SERPAPI_KEY: covers the big-box majors via one Google Shopping query.
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          # BESTBUY_API_KEY: official free Best Buy Products API.
+          BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
+          # Optional: route "direct" retailers through a scraping API too.
           SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
           SCRAPER_API_PROVIDER: ${{ vars.SCRAPER_API_PROVIDER }}
-          # Optional repo variable: "premium" or "ultra" to use tougher proxies
-          # for big-box retailers (costs more API credits). Empty = standard.
           SCRAPER_API_PREMIUM: ${{ vars.SCRAPER_API_PREMIUM }}
         run: python scraper/scrape.py
 

@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
 """Automated price scraper for the Kärcher K5 Power Control.
 
-Reads config/retailers.json, fetches each retailer's product page, extracts the
-price, and writes:
+Reads config/retailers.json and gets each retailer's price via the source best
+suited to it, then writes:
   - data/latest.json   : current snapshot the website reads
   - data/history.json  : append-only price history for the charts
+
+Per-retailer sources (config `source` field):
+  - "serpapi" : one Google Shopping query (SerpApi) covers the big-box majors
+                (Amazon, Walmart, Target, Home Depot, Lowe's) that block direct
+                scraping — read from Google's aggregated data instead.
+  - "bestbuy" : Best Buy's official free Products API (near-real-time price).
+  - "direct"  : fetch the retailer page directly (scraping API if keyed, else a
+                plain fetch + headless-browser fallback) for sites Google skips.
 
 Design goals:
   - Never crash the whole run because one retailer fails (per-retailer guard).
@@ -40,6 +48,12 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from extractors import extract_price  # noqa: E402
+from sources import (  # noqa: E402
+    BESTBUY_API_KEY,
+    SERPAPI_KEY,
+    get_bestbuy_price,
+    get_serpapi_prices,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG_PATH = ROOT / "config" / "retailers.json"
@@ -194,15 +208,48 @@ def fetch_html_rendered(url: str):
         return None
 
 
-def scrape_retailer(retailer: dict, price_range=None):
-    """Return a result dict for one retailer (always returns; never raises).
+def scrape_direct(retailer: dict):
+    """Fetch + extract a price by hitting the retailer page directly.
 
-    price_range: optional (min, max) sanity bounds; a scraped price outside the
-    range is rejected as likely-wrong rather than shown.
+    Uses the scraping API when SCRAPER_API_KEY is set (fast-first, then render),
+    otherwise a plain fetch + headless-browser fallback. Returns (price,
+    currency, method) with price=None when nothing usable was found.
     """
     rid = retailer["id"]
+    price = currency = method = None
+    if SCRAPER_API_KEY:
+        html = fetch_html_via_api(retailer["url"], render=False)
+        if html:
+            price, currency, method = extract_price(html, rid)
+            if method:
+                method = f"{method}+api"
+        if price is None:
+            html = fetch_html_via_api(retailer["url"], render=True)
+            if html:
+                price, currency, method = extract_price(html, rid)
+                if method:
+                    method = f"{method}+api-render"
+    else:
+        html = fetch_html(retailer["url"])
+        if html:
+            price, currency, method = extract_price(html, rid)
+        if price is None:
+            rendered = fetch_html_rendered(retailer["url"])
+            if rendered:
+                price, currency, method = extract_price(rendered, rid)
+                if method:
+                    method = f"{method}+rendered"
+    return price, currency, method
+
+
+def resolve_retailer(retailer: dict, serpapi_map: dict, price_range=None):
+    """Produce a result dict for one retailer, dispatching by its `source`.
+
+    serpapi_map: precomputed {retailer_id: {price, url, source}} from the single
+    Google Shopping query, so serpapi-sourced retailers are just a dict lookup.
+    """
     result = {
-        "retailer_id": rid,
+        "retailer_id": retailer["id"],
         "name": retailer["name"],
         "url": retailer["url"],
         "currency": retailer.get("currency", "USD"),
@@ -211,35 +258,23 @@ def scrape_retailer(retailer: dict, price_range=None):
         "method": None,
         "timestamp": now_iso(),
     }
+    source = retailer.get("source", "direct")
     try:
         price = currency = method = None
+        url_override = None
 
-        if SCRAPER_API_KEY:
-            # Fast path first (raw HTML, cheap): enough when the price is in
-            # JSON-LD/meta, which is most retailers.
-            html = fetch_html_via_api(retailer["url"], render=False)
-            if html:
-                price, currency, method = extract_price(html, rid)
-                if method:
-                    method = f"{method}+api"
-            # Escalate to JS-render only if the fast path found no price.
-            if price is None:
-                html = fetch_html_via_api(retailer["url"], render=True)
-                if html:
-                    price, currency, method = extract_price(html, rid)
-                    if method:
-                        method = f"{method}+api-render"
-        else:
-            html = fetch_html(retailer["url"])
-            if html:
-                price, currency, method = extract_price(html, rid)
-            # Only spin up the browser if the cheap path found nothing.
-            if price is None:
-                rendered = fetch_html_rendered(retailer["url"])
-                if rendered:
-                    price, currency, method = extract_price(rendered, rid)
-                    if method:
-                        method = f"{method}+rendered"
+        if source == "serpapi":
+            hit = serpapi_map.get(retailer["id"])
+            if hit:
+                price, method = hit["price"], "serpapi"
+                url_override = hit.get("url") or None
+        elif source == "bestbuy":
+            hit = get_bestbuy_price(retailer, price_range=price_range)
+            if hit:
+                price, method = hit["price"], "bestbuy-api"
+                url_override = hit.get("url") or None
+        else:  # direct
+            price, currency, method = scrape_direct(retailer)
 
         # Sanity guard: drop implausible values (e.g. an accessory price).
         if price is not None and price_range:
@@ -256,6 +291,8 @@ def scrape_retailer(retailer: dict, price_range=None):
                 status="ok",
                 method=method,
             )
+            if url_override:
+                result["url"] = url_override
     except Exception as exc:  # defensive: one retailer must not break the run
         result["error"] = str(exc)[:200]
     return result
@@ -273,17 +310,38 @@ def main() -> int:
     prev_prices = {r["retailer_id"]: r for r in previous_latest.get("retailers", [])}
     history = load_json(HISTORY_PATH, [])
 
-    price_range = config.get("product", {}).get("expected_price_range")
-    mode = f"scraping API ({SCRAPER_API_PROVIDER})" if SCRAPER_API_KEY else "direct fetch"
-    print(f"Fetch mode: {mode}\n")
-
-    # Scrape retailers concurrently so one slow site doesn't gate the rest.
+    product = config.get("product", {})
+    price_range = product.get("expected_price_range")
     retailers = config["retailers"]
+
+    # Report which sources are active.
+    active = []
+    if SERPAPI_KEY:
+        active.append("SerpApi (Google Shopping)")
+    if BESTBUY_API_KEY:
+        active.append("Best Buy API")
+    active.append("scraping API" if SCRAPER_API_KEY else "direct fetch")
+    print("Sources: " + ", ".join(active) + "\n")
+
+    # One Google Shopping query covers every serpapi-sourced retailer at once.
+    serpapi_retailers = [r for r in retailers if r.get("source") == "serpapi"]
+    serpapi_map = get_serpapi_prices(
+        product.get("serpapi_query") or product.get("name", ""),
+        serpapi_retailers,
+        match_terms=product.get("variant_match_terms"),
+        price_range=price_range,
+    )
+
+    # Resolve the rest (direct + Best Buy) concurrently; serpapi ones are a
+    # dict lookup so they cost nothing extra here.
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
         by_id = dict(
             zip(
                 (r["id"] for r in retailers),
-                pool.map(lambda r: scrape_retailer(r, price_range=price_range), retailers),
+                pool.map(
+                    lambda r: resolve_retailer(r, serpapi_map, price_range=price_range),
+                    retailers,
+                ),
             )
         )
     results = [by_id[r["id"]] for r in retailers]  # keep config order

@@ -5,19 +5,16 @@
     "sku": "1.324-571.0",
     "brand": "Kärcher",
     "market": "US",
-    "expected_price_range": [330, 700]
+    "expected_price_range": [330, 700],
+    "serpapi_query": "Karcher K5 Power Control CHK Car Home Kit pressure washer",
+    "variant_match_terms": ["chk", "car & home", "car and home", "car home", "1.324-571"]
   },
   "retailers": [
     {
-      "id": "karcher",
-      "name": "Kärcher (Official US Store)",
-      "country": "US",
-      "currency": "USD",
-      "url": "https://www.kaercher.com/us/home-garden/electric-pressure-washers/k-5-power-control-car-home-13245710.html"
-    },
-    {
       "id": "amazon",
       "name": "Amazon",
+      "source": "serpapi",
+      "match": ["amazon"],
       "country": "US",
       "currency": "USD",
       "url": "https://www.amazon.com/Karcher-Power-Control-Pressure-Washer/dp/B08THJXKYB"
@@ -25,6 +22,8 @@
     {
       "id": "homedepot",
       "name": "The Home Depot",
+      "source": "serpapi",
+      "match": ["home depot", "homedepot"],
       "country": "US",
       "currency": "USD",
       "url": "https://www.homedepot.com/p/Karcher-2500-Max-PSI-1-55-GPM-K-5-Power-Control-CHK-Cold-Water-Corded-Electric-Induction-Pressure-Washer-2-Wands-Surface-Cleaner-1-324-571-0/321829737"
@@ -32,6 +31,8 @@
     {
       "id": "lowes",
       "name": "Lowe's",
+      "source": "serpapi",
+      "match": ["lowe's", "lowes"],
       "country": "US",
       "currency": "USD",
       "url": "https://www.lowes.com/pd/Karcher-K-5-Power-Control-CHK-2500-PSI-Cold-Water-Electric-Pressure-Washer/5013794227"
@@ -39,6 +40,8 @@
     {
       "id": "walmart",
       "name": "Walmart",
+      "source": "serpapi",
+      "match": ["walmart"],
       "country": "US",
       "currency": "USD",
       "url": "https://www.walmart.com/ip/Karcher-K-5-Power-Control-CHK-2500-max-PSI-1-55-max-GPM-Pressure-Washer/7392357745"
@@ -46,6 +49,8 @@
     {
       "id": "target",
       "name": "Target",
+      "source": "serpapi",
+      "match": ["target"],
       "country": "US",
       "currency": "USD",
       "url": "https://www.target.com/p/k-rcher-k-5-power-control-chk-electric-pressure-washer/-/A-1002292629"
@@ -53,6 +58,9 @@
     {
       "id": "bestbuy",
       "name": "Best Buy",
+      "source": "bestbuy",
+      "manufacturer_part_number": "1.324-571.0",
+      "bestbuy_search": ["karcher", "k5", "power", "control", "chk"],
       "country": "US",
       "currency": "USD",
       "url": "https://www.bestbuy.com/product/karcher-k-5-power-control-chk-2500-psi-1-55-gpm-includes-car-kit-surface-cleaner-foam-cannon-for-cars-siding-driveways-yellow/J3Z8QCP48S"
@@ -60,13 +68,23 @@
     {
       "id": "nfm",
       "name": "Nebraska Furniture Mart",
+      "source": "direct",
       "country": "US",
       "currency": "USD",
       "url": "https://www.nfm.com/karcher-k5-power-control-chk-2000-psi-electric-pressure-washer-w-car--home-kit-65358814/65358814.html"
     },
     {
+      "id": "karcher",
+      "name": "Kärcher (Official US Store)",
+      "source": "direct",
+      "country": "US",
+      "currency": "USD",
+      "url": "https://www.kaercher.com/us/home-garden/electric-pressure-washers/k-5-power-control-car-home-13245710.html"
+    },
+    {
       "id": "qvc",
       "name": "QVC",
+      "source": "direct",
       "country": "US",
       "currency": "USD",
       "url": "https://www.qvc.com/karcher-k-5-power-control-chk-2000-psi-pressure-washer.product.H423035.html"
