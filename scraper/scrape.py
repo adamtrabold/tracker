@@ -31,6 +31,7 @@ import json
 import os
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
@@ -57,8 +58,12 @@ HEADERS = {
 }
 
 REQUEST_TIMEOUT = 25
-API_TIMEOUT = 75  # scraping APIs render JS server-side, so allow more time
+# Non-render API calls are fast (~5-15s); JS-render calls are slow (up to ~70s)
+# and cost ~10x more credits, so we only escalate to render when needed.
+API_TIMEOUT_FAST = 35
+API_TIMEOUT_RENDER = 70
 MAX_RETRIES = 3
+MAX_WORKERS = 4  # scrape retailers concurrently to keep wall-clock bounded
 
 # Optional scraping-API passthrough (set as a GitHub Actions secret).
 SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "").strip()
@@ -67,26 +72,32 @@ SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "").strip()
 SCRAPER_API_PROVIDER = (os.environ.get("SCRAPER_API_PROVIDER") or "scraperapi").strip().lower()
 
 
-def build_proxy_url(url: str):
-    """Wrap a target URL in the configured scraping-API request URL."""
+def build_proxy_url(url: str, render: bool = False):
+    """Wrap a target URL in the configured scraping-API request URL.
+
+    render=False fetches the raw HTML (fast/cheap — enough when the price is in
+    JSON-LD/meta); render=True runs the page's JS server-side (slow/costly).
+    """
     if not SCRAPER_API_KEY:
         return None
     target = quote(url, safe="")
+    flag = "true" if render else "false"
     if SCRAPER_API_PROVIDER == "scraperapi":
         return (
             f"https://api.scraperapi.com/?api_key={SCRAPER_API_KEY}"
-            f"&url={target}&render=true&country_code=us"
+            f"&url={target}&render={flag}&country_code=us"
         )
     if SCRAPER_API_PROVIDER == "scrapingbee":
         return (
             f"https://app.scrapingbee.com/api/v1/?api_key={SCRAPER_API_KEY}"
-            f"&url={target}&render_js=true&country_code=us"
+            f"&url={target}&render_js={flag}&country_code=us"
         )
     if SCRAPER_API_PROVIDER == "zenrows":
-        return (
+        base = (
             f"https://api.zenrows.com/v1/?apikey={SCRAPER_API_KEY}"
-            f"&url={target}&js_render=true&premium_proxy=true&proxy_country=us"
+            f"&url={target}&premium_proxy=true&proxy_country=us"
         )
+        return base + "&js_render=true" if render else base
     raise ValueError(f"Unknown SCRAPER_API_PROVIDER: {SCRAPER_API_PROVIDER!r}")
 
 
@@ -103,26 +114,32 @@ def load_json(path: Path, default):
     return default
 
 
-def fetch_html_via_api(url: str):
-    """Fetch through the configured scraping API (rotating IP + JS render)."""
-    proxy_url = build_proxy_url(url)
+def fetch_html_via_api(url: str, render: bool = False):
+    """Fetch through the scraping API. One bounded attempt (+1 retry only on a
+    transient error) so a slow site can't stall the whole run."""
+    proxy_url = build_proxy_url(url, render=render)
     if not proxy_url:
         return None
-    for attempt in range(MAX_RETRIES):
+    timeout = API_TIMEOUT_RENDER if render else API_TIMEOUT_FAST
+    for attempt in range(2):  # initial try + one retry on transient failure
         try:
-            resp = requests.get(proxy_url, timeout=API_TIMEOUT)
+            resp = requests.get(proxy_url, timeout=timeout)
             if resp.status_code == 200 and resp.text:
                 return resp.text
-            # API transient errors (rate limit / upstream retry) -> back off.
             if resp.status_code in (429, 500, 502, 503):
-                time.sleep(3 * (attempt + 1))
-                continue
+                if attempt == 0:
+                    time.sleep(3)
+                    continue
+                print(f"    API HTTP {resp.status_code} (transient) for {url[:60]}")
+                return None
             # Surface auth/quota errors (401/403/etc.) so they're diagnosable.
             print(f"    API HTTP {resp.status_code}: {resp.text[:120].strip()}")
             return None
         except requests.RequestException as exc:
-            print(f"    API request error: {str(exc)[:120]}")
-            time.sleep(3 * (attempt + 1))
+            if attempt == 0:
+                time.sleep(3)
+                continue
+            print(f"    API request error for {url[:60]}: {str(exc)[:100]}")
     return None
 
 
@@ -188,13 +205,20 @@ def scrape_retailer(retailer: dict, price_range=None):
         price = currency = method = None
 
         if SCRAPER_API_KEY:
-            # Route through the scraping API: rotates IPs + renders JS, so this
-            # single call replaces both the direct fetch and the browser render.
-            html = fetch_html_via_api(retailer["url"])
+            # Fast path first (raw HTML, cheap): enough when the price is in
+            # JSON-LD/meta, which is most retailers.
+            html = fetch_html_via_api(retailer["url"], render=False)
             if html:
                 price, currency, method = extract_price(html, rid)
                 if method:
                     method = f"{method}+api"
+            # Escalate to JS-render only if the fast path found no price.
+            if price is None:
+                html = fetch_html_via_api(retailer["url"], render=True)
+                if html:
+                    price, currency, method = extract_price(html, rid)
+                    if method:
+                        method = f"{method}+api-render"
         else:
             html = fetch_html(retailer["url"])
             if html:
@@ -243,10 +267,18 @@ def main() -> int:
     mode = f"scraping API ({SCRAPER_API_PROVIDER})" if SCRAPER_API_KEY else "direct fetch"
     print(f"Fetch mode: {mode}\n")
 
-    results = []
-    for retailer in config["retailers"]:
-        res = scrape_retailer(retailer, price_range=price_range)
+    # Scrape retailers concurrently so one slow site doesn't gate the rest.
+    retailers = config["retailers"]
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+        by_id = dict(
+            zip(
+                (r["id"] for r in retailers),
+                pool.map(lambda r: scrape_retailer(r, price_range=price_range), retailers),
+            )
+        )
+    results = [by_id[r["id"]] for r in retailers]  # keep config order
 
+    for res in results:
         # Preserve last known price when this run failed to fetch one.
         if res["status"] != "ok":
             prev = prev_prices.get(res["retailer_id"])
@@ -256,7 +288,6 @@ def main() -> int:
 
         status_word = f"${res['price']}" if res["price"] is not None else res["status"]
         print(f"  {res['name']:<32} {status_word}  ({res.get('method') or '-'})")
-        results.append(res)
 
         # Record every observation (ok only) in history for the charts.
         if res["status"] == "ok":
