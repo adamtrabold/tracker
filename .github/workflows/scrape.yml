@@ -40,6 +40,9 @@ jobs:
           # get past retailer anti-bot blocks. Without it, direct fetch is used.
           SCRAPER_API_KEY: ${{ secrets.SCRAPER_API_KEY }}
           SCRAPER_API_PROVIDER: ${{ vars.SCRAPER_API_PROVIDER }}
+          # Optional repo variable: "premium" or "ultra" to use tougher proxies
+          # for big-box retailers (costs more API credits). Empty = standard.
+          SCRAPER_API_PREMIUM: ${{ vars.SCRAPER_API_PREMIUM }}
         run: python scraper/scrape.py
 
       - name: Commit updated data

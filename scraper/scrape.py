@@ -60,7 +60,7 @@ HEADERS = {
 REQUEST_TIMEOUT = 25
 # Non-render API calls are fast (~5-15s); JS-render calls are slow (up to ~70s)
 # and cost ~10x more credits, so we only escalate to render when needed.
-API_TIMEOUT_FAST = 35
+API_TIMEOUT_FAST = 60
 API_TIMEOUT_RENDER = 70
 MAX_RETRIES = 3
 MAX_WORKERS = 4  # scrape retailers concurrently to keep wall-clock bounded
@@ -70,6 +70,9 @@ SCRAPER_API_KEY = os.environ.get("SCRAPER_API_KEY", "").strip()
 # Use `or` (not a get-default) so an env var present-but-empty — which is what
 # GitHub injects for an unset repo variable — still falls back to the default.
 SCRAPER_API_PROVIDER = (os.environ.get("SCRAPER_API_PROVIDER") or "scraperapi").strip().lower()
+# Proxy tier: "" (standard, 1 credit), "premium" (~10-25 credits, gets past most
+# big-box anti-bot), or "ultra" (~30 credits, hardest sites). Costs more credits.
+SCRAPER_API_PREMIUM = (os.environ.get("SCRAPER_API_PREMIUM") or "").strip().lower()
 
 
 def build_proxy_url(url: str, render: bool = False):
@@ -77,20 +80,27 @@ def build_proxy_url(url: str, render: bool = False):
 
     render=False fetches the raw HTML (fast/cheap — enough when the price is in
     JSON-LD/meta); render=True runs the page's JS server-side (slow/costly).
+    The SCRAPER_API_PREMIUM tier adds premium/ultra proxies for hard sites.
     """
     if not SCRAPER_API_KEY:
         return None
     target = quote(url, safe="")
     flag = "true" if render else "false"
     if SCRAPER_API_PROVIDER == "scraperapi":
+        extra = ""
+        if SCRAPER_API_PREMIUM == "ultra":
+            extra = "&ultra_premium=true"
+        elif SCRAPER_API_PREMIUM in ("premium", "1", "true"):
+            extra = "&premium=true"
         return (
             f"https://api.scraperapi.com/?api_key={SCRAPER_API_KEY}"
-            f"&url={target}&render={flag}&country_code=us"
+            f"&url={target}&render={flag}&country_code=us{extra}"
         )
     if SCRAPER_API_PROVIDER == "scrapingbee":
+        extra = "&premium_proxy=true" if SCRAPER_API_PREMIUM else ""
         return (
             f"https://app.scrapingbee.com/api/v1/?api_key={SCRAPER_API_KEY}"
-            f"&url={target}&render_js={flag}&country_code=us"
+            f"&url={target}&render_js={flag}&country_code=us{extra}"
         )
     if SCRAPER_API_PROVIDER == "zenrows":
         base = (
