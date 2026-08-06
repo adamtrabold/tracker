@@ -76,7 +76,16 @@ def get_serpapi_prices(query, retailers, match_terms=None, price_range=None):
         return out
 
     results = data.get("shopping_results") or []
+    # Diagnostics: show what came back so mismatches are debuggable.
+    print(f"    SerpApi: {len(results)} shopping_results for {query!r}")
+    for it in results[:10]:
+        print(f"      [{it.get('source')}] {(it.get('title') or '')[:55]} "
+              f"= {it.get('extracted_price') or it.get('price')}")
+    if not results and data.get("error"):
+        print(f"    SerpApi error field: {data.get('error')}")
+
     lo, hi = (price_range or (None, None))
+    matched = 0
     for item in results:
         title = item.get("title", "")
         if not _title_matches(title, match_terms):
@@ -94,6 +103,8 @@ def get_serpapi_prices(query, retailers, match_terms=None, price_range=None):
                 continue
             if any(kw.lower() in source for kw in r.get("match", [])):
                 out[rid] = {"price": price, "url": link, "source": item.get("source")}
+                matched += 1
+    print(f"    SerpApi matched {matched} retailer(s)")
     return out
 
 
