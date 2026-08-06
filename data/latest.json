@@ -1,12 +1,29 @@
 {
   "product": {
-    "name": "Kärcher K5 Power Control CHK (Car & Home Kit)",
+    "name": "K\u00e4rcher K5 Power Control CHK (Car & Home Kit)",
     "model": "K5 Power Control CHK",
     "sku": "1.324-571.0",
-    "brand": "Kärcher",
-    "market": "US"
+    "brand": "K\u00e4rcher",
+    "market": "US",
+    "expected_price_range": [
+      330,
+      700
+    ],
+    "serpapi_query": "Karcher K5 Power Control CHK Car Home Kit pressure washer",
+    "variant_match_terms": [
+      "chk",
+      "1.324-571"
+    ],
+    "exclude_terms": [
+      "flex",
+      "premium",
+      "smart control",
+      "full control",
+      " fc ",
+      "k 5 fc"
+    ]
   },
-  "updated_at": null,
+  "updated_at": "2026-08-06T21:52:53+00:00",
   "retailers": [
     {
       "retailer_id": "nfm",
@@ -16,7 +33,7 @@
       "price": 499.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-06T21:35:47+00:00"
+      "timestamp": "2026-08-06T21:52:35+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -26,7 +43,7 @@
       "price": 559.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-06T21:35:47+00:00"
+      "timestamp": "2026-08-06T21:52:35+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -36,7 +53,17 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-06T21:35:47+00:00"
+      "timestamp": "2026-08-06T21:52:35+00:00"
+    },
+    {
+      "retailer_id": "serp-northern-tool",
+      "name": "Northern Tool",
+      "url": "https://www.google.com/search?ibp=oshop&q=Karcher K5 Power Control CHK Car Home Kit pressure washer&prds=catalogid:13505040604876439150,productid:2709908216544238382,headlineOfferDocid:11944030912060876369,imageDocid:12642641332801008404,rds:PC_9690838211679561760|PROD_PC_9690838211679561760,gpcid:9690838211679561760,pvt:hg&hl=en&gl=us&udm=28",
+      "currency": "USD",
+      "price": 499.99,
+      "status": "ok",
+      "method": "serpapi",
+      "timestamp": "2026-08-06T21:52:53+00:00"
     }
   ]
 }
