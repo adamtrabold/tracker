@@ -52,7 +52,7 @@ from sources import (  # noqa: E402
     BESTBUY_API_KEY,
     SERPAPI_KEY,
     get_bestbuy_price,
-    get_serpapi_prices,
+    get_serpapi_sellers,
 )
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -280,11 +280,9 @@ def scrape_direct(retailer: dict):
     return price, currency, method
 
 
-def resolve_retailer(retailer: dict, serpapi_map: dict, price_range=None):
-    """Produce a result dict for one retailer, dispatching by its `source`.
-
-    serpapi_map: precomputed {retailer_id: {price, url, source}} from the single
-    Google Shopping query, so serpapi-sourced retailers are just a dict lookup.
+def resolve_retailer(retailer: dict, price_range=None):
+    """Produce a result dict for one fixed retailer, dispatching by `source`
+    ("bestbuy" or "direct"). Google-Shopping sellers are discovered separately.
     """
     result = {
         "retailer_id": retailer["id"],
@@ -301,12 +299,7 @@ def resolve_retailer(retailer: dict, serpapi_map: dict, price_range=None):
         price = currency = method = None
         url_override = None
 
-        if source == "serpapi":
-            hit = serpapi_map.get(retailer["id"])
-            if hit:
-                price, method = hit["price"], "serpapi"
-                url_override = hit.get("url") or None
-        elif source == "bestbuy":
+        if source == "bestbuy":
             hit = get_bestbuy_price(retailer, price_range=price_range)
             if hit:
                 price, method = hit["price"], "bestbuy-api"
@@ -361,28 +354,40 @@ def main() -> int:
     active.append("scraping API" if SCRAPER_API_KEY else "direct fetch")
     print("Sources: " + ", ".join(active) + "\n")
 
-    # One Google Shopping query covers every serpapi-sourced retailer at once.
-    serpapi_retailers = [r for r in retailers if r.get("source") == "serpapi"]
-    serpapi_map = get_serpapi_prices(
+    # Fixed retailers (direct fetch + Best Buy API), resolved concurrently.
+    fixed = [r for r in retailers if r.get("source") != "serpapi"]
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+        fixed_results = list(
+            pool.map(lambda r: resolve_retailer(r, price_range=price_range), fixed)
+        )
+
+    # Discovered sellers: one Google Shopping query surfaces whichever sites
+    # actually list the exact variant.
+    sellers = get_serpapi_sellers(
         product.get("serpapi_query") or product.get("name", ""),
-        serpapi_retailers,
-        match_terms=product.get("variant_match_terms"),
+        product.get("variant_match_terms"),
+        exclude_terms=product.get("exclude_terms"),
         price_range=price_range,
     )
+    fixed_names = {r["name"].lower() for r in fixed_results}
+    now = now_iso()
+    discovered_results = []
+    for s in sellers:
+        if s["name"].lower() in fixed_names:  # don't duplicate a fixed retailer
+            continue
+        discovered_results.append({
+            "retailer_id": s["id"],
+            "name": s["name"],
+            "url": s["url"],
+            "currency": "USD",
+            "price": s["price"],
+            "status": "ok",
+            "method": "serpapi",
+            "timestamp": now,
+        })
 
-    # Resolve the rest (direct + Best Buy) concurrently; serpapi ones are a
-    # dict lookup so they cost nothing extra here.
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
-        by_id = dict(
-            zip(
-                (r["id"] for r in retailers),
-                pool.map(
-                    lambda r: resolve_retailer(r, serpapi_map, price_range=price_range),
-                    retailers,
-                ),
-            )
-        )
-    results = [by_id[r["id"]] for r in retailers]  # keep config order
+    # Fixed retailers first, then discovered sellers sorted by price.
+    results = fixed_results + discovered_results
 
     for res in results:
         # Preserve last known price when this run failed to fetch one.

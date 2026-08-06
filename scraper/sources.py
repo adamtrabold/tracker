@@ -1,12 +1,13 @@
 """Alternative price sources that don't require scraping the retailer directly.
 
-- SerpApi Google Shopping: one query returns prices from the major retailers
-  Google indexes (Amazon, Walmart, Target, Home Depot, Lowe's, ...). This gets
-  past the big-box anti-bot blocks because we read Google's aggregated data.
+- SerpApi Google Shopping: one query discovers every site Google lists selling
+  the exact product, filtered to the target variant. (The big US chains don't
+  appear in this feed and also block scraping, so we surface whichever sites
+  Google does list rather than a fixed retailer list.)
 - Best Buy Developer API: official, free, near-real-time pricing by SKU / part
   number — no scraping at all.
 
-Both take an API key (GitHub Actions secret) and return plain floats.
+Both take an API key (GitHub Actions secret).
 """
 
 from __future__ import annotations
@@ -42,19 +43,34 @@ def _title_matches(title: str, match_terms) -> bool:
     return any(term.lower() in low for term in match_terms)
 
 
+def _slug(text: str) -> str:
+    """Turn a retailer/source name into a stable id (e.g. 'Northern Tool')."""
+    import re
+
+    s = re.sub(r"[^a-z0-9]+", "-", (text or "").lower()).strip("-")
+    return s or "seller"
+
+
 # ---------------------------------------------------------------------------
-# SerpApi Google Shopping
+# SerpApi Google Shopping — auto-discover sellers of the exact variant
 # ---------------------------------------------------------------------------
 
-def get_serpapi_prices(query, retailers, match_terms=None, price_range=None):
-    """Run one Google Shopping search and map results onto our retailers.
+def get_serpapi_sellers(query, match_terms, exclude_terms=None, price_range=None,
+                        max_sellers=15):
+    """Discover every site selling the target product via one Google Shopping
+    query, keeping only listings that match the exact variant.
 
-    retailers: list of {id, match:[keywords]} for the serpapi-sourced entries.
-    Returns {retailer_id: {"price", "url", "source"}} for matches found.
+    Big US chains don't appear in this feed (and block scraping), so rather than
+    a fixed retailer list we surface whichever sites Google actually lists. A
+    listing is kept when its title contains a `match_terms` token (e.g. "chk"
+    or the SKU), contains none of `exclude_terms` (other variants like "flex" /
+    "premium"), and its price is within `price_range`.
+
+    Returns a list of {"id","name","price","url","source"}, one per seller
+    (lowest price kept when a seller lists it more than once).
     """
-    out = {}
-    if not SERPAPI_KEY or not retailers:
-        return out
+    if not SERPAPI_KEY:
+        return []
     try:
         resp = requests.get(
             "https://serpapi.com/search.json",
@@ -69,57 +85,49 @@ def get_serpapi_prices(query, retailers, match_terms=None, price_range=None):
         )
         if resp.status_code != 200:
             print(f"    SerpApi HTTP {resp.status_code}: {resp.text[:120].strip()}")
-            return out
+            return []
         data = resp.json()
     except (requests.RequestException, ValueError) as exc:
         print(f"    SerpApi request error: {str(exc)[:120]}")
-        return out
+        return []
 
     results = data.get("shopping_results") or []
-    # Diagnostics: show what came back so mismatches are debuggable.
     print(f"    SerpApi: {len(results)} shopping_results for {query!r}")
-    for it in results[:10]:
+    for it in results[:12]:
         print(f"      [{it.get('source')}] {(it.get('title') or '')[:55]} "
               f"= {it.get('extracted_price') or it.get('price')}")
     if not results and data.get("error"):
         print(f"    SerpApi error field: {data.get('error')}")
 
     lo, hi = (price_range or (None, None))
-
-    # Two-tier match, keeping the best-ranked hit per retailer:
-    #   strict = title looks like the right variant (e.g. contains "CHK")
-    #   loose  = right retailer + price in the expected range (which already
-    #            excludes the cheaper base model), regardless of title wording
-    # Prefer strict; fall back to loose so we still get a CHK-range price even
-    # when Google's title omits the variant words.
-    strict, loose = {}, {}
+    exclude_terms = [t.lower() for t in (exclude_terms or [])]
+    by_seller = {}
     for item in results:
+        title = item.get("title", "")
+        low = title.lower()
+        if not _title_matches(title, match_terms):
+            continue
+        if any(x in low for x in exclude_terms):
+            continue
         price = _extract_price(item.get("extracted_price") or item.get("price"))
         if price is None:
             continue
         if lo is not None and not (lo <= price <= hi):
             continue
-        source = (item.get("source") or "").lower()
+        source = item.get("source") or "Unknown"
+        sid = "serp-" + _slug(source)
         link = item.get("product_link") or item.get("link") or ""
-        is_variant = _title_matches(item.get("title", ""), match_terms)
-        for r in retailers:
-            rid = r["id"]
-            if not any(kw.lower() in source for kw in r.get("match", [])):
-                continue
-            hit = {"price": price, "url": link, "source": item.get("source")}
-            if is_variant:
-                strict.setdefault(rid, hit)
-            loose.setdefault(rid, hit)
+        prev = by_seller.get(sid)
+        if prev is None or price < prev["price"]:
+            by_seller[sid] = {
+                "id": sid, "name": source, "price": price,
+                "url": link, "source": source,
+            }
 
-    for r in retailers:
-        rid = r["id"]
-        if rid in strict:
-            out[rid] = strict[rid]
-        elif rid in loose:
-            out[rid] = loose[rid]
-    print(f"    SerpApi matched {len(out)} retailer(s) "
-          f"({len(strict)} by variant title, {len(out) - len(strict)} by price range)")
-    return out
+    sellers = sorted(by_seller.values(), key=lambda s: s["price"])[:max_sellers]
+    print(f"    SerpApi: {len(sellers)} seller(s) matched the exact variant "
+          f"({', '.join(s['name'] for s in sellers) or 'none'})")
+    return sellers
 
 
 # ---------------------------------------------------------------------------

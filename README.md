@@ -6,16 +6,16 @@ schedule — there's nothing to update by hand.
 
 ## How it works
 
-Each retailer is priced via the source best suited to it — because the big-box
-stores block direct scraping, but their prices are available elsewhere:
+The tracker finds **whichever sites actually list the exact CHK variant** and
+prices each:
 
 ```
 GitHub Actions (cron, every 6h) → runs scraper/scrape.py
         │
-        ├─ SerpApi Google Shopping  → Amazon, Walmart, Target, Home Depot, Lowe's
-        │     (one query returns all of them from Google's aggregated data)
-        ├─ Best Buy Products API     → Best Buy (official, free)
-        └─ Direct fetch (JSON-LD)    → NFM, Kärcher, QVC (sites Google skips)
+        ├─ SerpApi Google Shopping  → DISCOVERS every site Google lists selling
+        │     the CHK, filtered to the exact variant (rejects Flex/Premium/base)
+        ├─ Best Buy Products API     → Best Buy (official, free) — when key added
+        └─ Direct fetch (JSON-LD)    → known sellers Google skips (NFM, QVC)
         │
         ▼
 write data/latest.json + append data/history.json → commit back to the repo
@@ -25,6 +25,13 @@ GitHub Pages serves the site → live table + price-history chart
 
 Everything runs on free GitHub infrastructure plus free API tiers. No server,
 no database, no manual price entry.
+
+**Why not Amazon / Walmart / Target / Home Depot / Lowe's?** They sell the CHK
+but block automated pricing three ways at once (datacenter-IP reputation, TLS
+fingerprinting, and Akamai/PerimeterX JS challenges) **and** don't appear in
+Google Shopping for this product — so no free method reaches their price. The
+tracker therefore surfaces the sites it genuinely can price (specialty
+retailers Google lists, plus NFM/QVC) rather than showing permanent blanks.
 
 ## Project layout
 

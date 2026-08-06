@@ -1,85 +1,13 @@
 {
   "product": {
-    "name": "K\u00e4rcher K5 Power Control CHK (Car & Home Kit)",
+    "name": "Kärcher K5 Power Control CHK (Car & Home Kit)",
     "model": "K5 Power Control CHK",
     "sku": "1.324-571.0",
-    "brand": "K\u00e4rcher",
-    "market": "US",
-    "expected_price_range": [
-      330,
-      700
-    ],
-    "serpapi_query": "Karcher K5 Power Control CHK Car Home Kit pressure washer",
-    "variant_match_terms": [
-      "chk",
-      "car & home",
-      "car and home",
-      "car home",
-      "1.324-571"
-    ]
+    "brand": "Kärcher",
+    "market": "US"
   },
-  "updated_at": "2026-08-06T21:35:47+00:00",
+  "updated_at": null,
   "retailers": [
-    {
-      "retailer_id": "amazon",
-      "name": "Amazon",
-      "url": "https://www.amazon.com/Karcher-Power-Control-Pressure-Washer/dp/B08THJXKYB",
-      "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-08-06T21:35:24+00:00"
-    },
-    {
-      "retailer_id": "homedepot",
-      "name": "The Home Depot",
-      "url": "https://www.homedepot.com/p/Karcher-2500-Max-PSI-1-55-GPM-K-5-Power-Control-CHK-Cold-Water-Corded-Electric-Induction-Pressure-Washer-2-Wands-Surface-Cleaner-1-324-571-0/321829737",
-      "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-08-06T21:35:24+00:00"
-    },
-    {
-      "retailer_id": "lowes",
-      "name": "Lowe's",
-      "url": "https://www.lowes.com/pd/Karcher-K-5-Power-Control-CHK-2500-PSI-Cold-Water-Electric-Pressure-Washer/5013794227",
-      "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-08-06T21:35:24+00:00"
-    },
-    {
-      "retailer_id": "walmart",
-      "name": "Walmart",
-      "url": "https://www.walmart.com/ip/Karcher-K-5-Power-Control-CHK-2500-max-PSI-1-55-max-GPM-Pressure-Washer/7392357745",
-      "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-08-06T21:35:24+00:00"
-    },
-    {
-      "retailer_id": "target",
-      "name": "Target",
-      "url": "https://www.target.com/p/k-rcher-k-5-power-control-chk-electric-pressure-washer/-/A-1002292629",
-      "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-08-06T21:35:24+00:00"
-    },
-    {
-      "retailer_id": "bestbuy",
-      "name": "Best Buy",
-      "url": "https://www.bestbuy.com/product/karcher-k-5-power-control-chk-2500-psi-1-55-gpm-includes-car-kit-surface-cleaner-foam-cannon-for-cars-siding-driveways-yellow/J3Z8QCP48S",
-      "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-08-06T21:35:24+00:00"
-    },
     {
       "retailer_id": "nfm",
       "name": "Nebraska Furniture Mart",
@@ -88,17 +16,7 @@
       "price": 499.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-06T21:35:24+00:00"
-    },
-    {
-      "retailer_id": "karcher",
-      "name": "K\u00e4rcher (Official US Store)",
-      "url": "https://www.kaercher.com/us/home-garden/electric-pressure-washers/k-5-power-control-car-home-13245710.html",
-      "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-08-06T21:35:24+00:00"
+      "timestamp": "2026-08-06T21:35:47+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -108,7 +26,17 @@
       "price": 559.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-06T21:35:24+00:00"
+      "timestamp": "2026-08-06T21:35:47+00:00"
+    },
+    {
+      "retailer_id": "bestbuy",
+      "name": "Best Buy",
+      "url": "https://www.bestbuy.com/product/karcher-k-5-power-control-chk-2500-psi-1-55-gpm-includes-car-kit-surface-cleaner-foam-cannon-for-cars-siding-driveways-yellow/J3Z8QCP48S",
+      "currency": "USD",
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-08-06T21:35:47+00:00"
     }
   ]
 }
