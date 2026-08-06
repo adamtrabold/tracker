@@ -18,7 +18,7 @@
       "1.324-571"
     ]
   },
-  "updated_at": "2026-08-06T20:26:04+00:00",
+  "updated_at": "2026-08-06T21:35:47+00:00",
   "retailers": [
     {
       "retailer_id": "amazon",
@@ -28,7 +28,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     },
     {
       "retailer_id": "homedepot",
@@ -38,7 +38,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     },
     {
       "retailer_id": "lowes",
@@ -48,7 +48,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     },
     {
       "retailer_id": "walmart",
@@ -58,7 +58,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     },
     {
       "retailer_id": "target",
@@ -68,7 +68,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -78,7 +78,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     },
     {
       "retailer_id": "nfm",
@@ -88,7 +88,7 @@
       "price": 499.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     },
     {
       "retailer_id": "karcher",
@@ -98,7 +98,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -108,7 +108,7 @@
       "price": 559.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-06T20:25:40+00:00"
+      "timestamp": "2026-08-06T21:35:24+00:00"
     }
   ]
 }
