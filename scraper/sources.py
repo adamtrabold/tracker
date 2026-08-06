@@ -85,11 +85,15 @@ def get_serpapi_prices(query, retailers, match_terms=None, price_range=None):
         print(f"    SerpApi error field: {data.get('error')}")
 
     lo, hi = (price_range or (None, None))
-    matched = 0
+
+    # Two-tier match, keeping the best-ranked hit per retailer:
+    #   strict = title looks like the right variant (e.g. contains "CHK")
+    #   loose  = right retailer + price in the expected range (which already
+    #            excludes the cheaper base model), regardless of title wording
+    # Prefer strict; fall back to loose so we still get a CHK-range price even
+    # when Google's title omits the variant words.
+    strict, loose = {}, {}
     for item in results:
-        title = item.get("title", "")
-        if not _title_matches(title, match_terms):
-            continue
         price = _extract_price(item.get("extracted_price") or item.get("price"))
         if price is None:
             continue
@@ -97,14 +101,24 @@ def get_serpapi_prices(query, retailers, match_terms=None, price_range=None):
             continue
         source = (item.get("source") or "").lower()
         link = item.get("product_link") or item.get("link") or ""
+        is_variant = _title_matches(item.get("title", ""), match_terms)
         for r in retailers:
             rid = r["id"]
-            if rid in out:  # keep the first (best-ranked) match per retailer
+            if not any(kw.lower() in source for kw in r.get("match", [])):
                 continue
-            if any(kw.lower() in source for kw in r.get("match", [])):
-                out[rid] = {"price": price, "url": link, "source": item.get("source")}
-                matched += 1
-    print(f"    SerpApi matched {matched} retailer(s)")
+            hit = {"price": price, "url": link, "source": item.get("source")}
+            if is_variant:
+                strict.setdefault(rid, hit)
+            loose.setdefault(rid, hit)
+
+    for r in retailers:
+        rid = r["id"]
+        if rid in strict:
+            out[rid] = strict[rid]
+        elif rid in loose:
+            out[rid] = loose[rid]
+    print(f"    SerpApi matched {len(out)} retailer(s) "
+          f"({len(strict)} by variant title, {len(out) - len(strict)} by price range)")
     return out
 
 
