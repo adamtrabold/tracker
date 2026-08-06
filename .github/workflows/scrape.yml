@@ -9,10 +9,6 @@ on:
 permissions:
   contents: write         # needed to commit updated data/ back to the repo
 
-concurrency:
-  group: scrape
-  cancel-in-progress: false
-
 jobs:
   scrape:
     runs-on: ubuntu-latest
