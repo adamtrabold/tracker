@@ -58,7 +58,8 @@
     {
       "id": "bestbuy",
       "name": "Best Buy",
-      "source": "bestbuy",
+      "source": "serpapi",
+      "match": ["best buy", "bestbuy"],
       "manufacturer_part_number": "1.324-571.0",
       "bestbuy_search": ["karcher", "k5", "power", "control", "chk"],
       "country": "US",
