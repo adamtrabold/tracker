@@ -160,5 +160,23 @@
     "price": 499.99,
     "currency": "USD",
     "timestamp": "2026-08-07T18:46:14+00:00"
+  },
+  {
+    "retailer_id": "nfm",
+    "price": 499.99,
+    "currency": "USD",
+    "timestamp": "2026-08-08T01:08:28+00:00"
+  },
+  {
+    "retailer_id": "qvc",
+    "price": 559.99,
+    "currency": "USD",
+    "timestamp": "2026-08-08T01:08:28+00:00"
+  },
+  {
+    "retailer_id": "serp-northern-tool",
+    "price": 499.99,
+    "currency": "USD",
+    "timestamp": "2026-08-08T01:08:48+00:00"
   }
 ]
