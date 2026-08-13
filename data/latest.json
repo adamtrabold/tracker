@@ -23,7 +23,7 @@
       "k 5 fc"
     ]
   },
-  "updated_at": "2026-08-13T07:18:09+00:00",
+  "updated_at": "2026-08-13T12:56:47+00:00",
   "retailers": [
     {
       "retailer_id": "nfm",
@@ -33,7 +33,7 @@
       "price": 489.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-13T07:17:47+00:00"
+      "timestamp": "2026-08-13T12:56:33+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -43,7 +43,7 @@
       "price": 559.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-13T07:17:47+00:00"
+      "timestamp": "2026-08-13T12:56:33+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -53,17 +53,17 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-13T07:17:47+00:00"
+      "timestamp": "2026-08-13T12:56:33+00:00"
     },
     {
-      "retailer_id": "serp-nfm",
-      "name": "NFM",
-      "url": "https://www.google.com/search?ibp=oshop&q=Karcher K5 Power Control CHK Car Home Kit pressure washer&prds=catalogid:13505040604876439150,productid:2709908216544238382,headlineOfferDocid:5411417071247427291,imageDocid:15513238589624645965,rds:PC_9690838211679561760|PROD_PC_9690838211679561760,gpcid:9690838211679561760,pvt:hg&hl=en&gl=us&udm=28",
+      "retailer_id": "serp-northern-tool",
+      "name": "Northern Tool",
+      "url": "https://www.google.com/search?ibp=oshop&q=Karcher K5 Power Control CHK Car Home Kit pressure washer&prds=catalogid:13505040604876439150,productid:2709908216544238382,headlineOfferDocid:11944030912060876369,imageDocid:12642641332801008404,rds:PC_9690838211679561760|PROD_PC_9690838211679561760,gpcid:9690838211679561760,pvt:hg&hl=en&gl=us&udm=28",
       "currency": "USD",
-      "price": 489.99,
+      "price": 499.99,
       "status": "ok",
       "method": "serpapi",
-      "timestamp": "2026-08-13T07:18:09+00:00"
+      "timestamp": "2026-08-13T12:56:47+00:00"
     }
   ]
 }
