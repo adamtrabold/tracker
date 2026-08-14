@@ -23,7 +23,7 @@
       "k 5 fc"
     ]
   },
-  "updated_at": "2026-08-14T12:56:07+00:00",
+  "updated_at": "2026-08-14T18:45:28+00:00",
   "retailers": [
     {
       "retailer_id": "nfm",
@@ -33,7 +33,7 @@
       "price": 489.99,
       "status": "ok",
       "method": "json-ld+api",
-      "timestamp": "2026-08-14T12:52:11+00:00"
+      "timestamp": "2026-08-14T18:44:52+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -42,8 +42,8 @@
       "currency": "USD",
       "price": 559.99,
       "status": "ok",
-      "method": "json-ld+api-render",
-      "timestamp": "2026-08-14T12:52:11+00:00"
+      "method": "json-ld+api",
+      "timestamp": "2026-08-14T18:44:52+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -53,7 +53,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-08-14T12:52:11+00:00"
+      "timestamp": "2026-08-14T18:44:52+00:00"
     },
     {
       "retailer_id": "serp-nfm",
@@ -63,7 +63,7 @@
       "price": 489.99,
       "status": "ok",
       "method": "serpapi",
-      "timestamp": "2026-08-14T12:56:07+00:00"
+      "timestamp": "2026-08-14T18:45:28+00:00"
     }
   ]
 }
