@@ -958,5 +958,23 @@
     "price": 499.99,
     "currency": "USD",
     "timestamp": "2026-08-19T12:34:04+00:00"
+  },
+  {
+    "retailer_id": "nfm",
+    "price": 489.99,
+    "currency": "USD",
+    "timestamp": "2026-08-19T18:46:31+00:00"
+  },
+  {
+    "retailer_id": "qvc",
+    "price": 559.99,
+    "currency": "USD",
+    "timestamp": "2026-08-19T18:46:31+00:00"
+  },
+  {
+    "retailer_id": "serp-steambrite-supply",
+    "price": 499.99,
+    "currency": "USD",
+    "timestamp": "2026-08-19T18:46:37+00:00"
   }
 ]
