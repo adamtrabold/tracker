@@ -1354,5 +1354,23 @@
     "price": 624.99,
     "currency": "USD",
     "timestamp": "2026-08-25T00:55:28+00:00"
+  },
+  {
+    "retailer_id": "nfm",
+    "price": 489.99,
+    "currency": "USD",
+    "timestamp": "2026-08-25T06:35:27+00:00"
+  },
+  {
+    "retailer_id": "qvc",
+    "price": 559.99,
+    "currency": "USD",
+    "timestamp": "2026-08-25T06:35:27+00:00"
+  },
+  {
+    "retailer_id": "serp-nfm",
+    "price": 489.99,
+    "currency": "USD",
+    "timestamp": "2026-08-25T06:35:31+00:00"
   }
 ]
