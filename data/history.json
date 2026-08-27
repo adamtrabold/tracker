@@ -1432,5 +1432,11 @@
     "price": 489.99,
     "currency": "USD",
     "timestamp": "2026-08-26T19:42:27+00:00"
+  },
+  {
+    "retailer_id": "serp-martdiscover-com",
+    "price": 624.99,
+    "currency": "USD",
+    "timestamp": "2026-08-27T06:41:46+00:00"
   }
 ]
