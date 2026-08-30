@@ -1492,5 +1492,11 @@
     "price": 489.99,
     "currency": "USD",
     "timestamp": "2026-08-30T15:52:26+00:00"
+  },
+  {
+    "retailer_id": "serp-steambrite-supply",
+    "price": 499.99,
+    "currency": "USD",
+    "timestamp": "2026-08-30T20:23:22+00:00"
   }
 ]
