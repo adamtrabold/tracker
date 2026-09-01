@@ -1534,5 +1534,11 @@
     "price": 489.99,
     "currency": "USD",
     "timestamp": "2026-09-01T15:56:02+00:00"
+  },
+  {
+    "retailer_id": "serp-nfm",
+    "price": 489.99,
+    "currency": "USD",
+    "timestamp": "2026-09-01T20:23:59+00:00"
   }
 ]
