@@ -1552,5 +1552,11 @@
     "price": 489.99,
     "currency": "USD",
     "timestamp": "2026-09-02T10:24:04+00:00"
+  },
+  {
+    "retailer_id": "serp-factorypure",
+    "price": 488.99,
+    "currency": "USD",
+    "timestamp": "2026-09-02T15:51:07+00:00"
   }
 ]
