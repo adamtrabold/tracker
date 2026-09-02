@@ -23,7 +23,7 @@
       "k 5 fc"
     ]
   },
-  "updated_at": "2026-09-02T15:51:07+00:00",
+  "updated_at": "2026-09-02T20:23:58+00:00",
   "retailers": [
     {
       "retailer_id": "nfm",
@@ -33,7 +33,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-09-02T15:50:39+00:00"
+      "timestamp": "2026-09-02T20:23:56+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -43,7 +43,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-09-02T15:50:39+00:00"
+      "timestamp": "2026-09-02T20:23:56+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -53,17 +53,17 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-09-02T15:50:39+00:00"
+      "timestamp": "2026-09-02T20:23:56+00:00"
     },
     {
-      "retailer_id": "serp-factorypure",
-      "name": "FactoryPure",
-      "url": "https://www.google.com/search?ibp=oshop&q=Karcher K5 Power Control CHK Car Home Kit pressure washer&prds=catalogid:13505040604876439150,productid:2709908216544238382,headlineOfferDocid:372634901372238861,imageDocid:17296648791985174217,rds:PC_9690838211679561760|PROD_PC_9690838211679561760,gpcid:9690838211679561760,pvt:hg&hl=en&gl=us&udm=28",
+      "retailer_id": "serp-martexplore-com",
+      "name": "Martexplore.com",
+      "url": "https://www.google.com/search?ibp=oshop&q=Karcher K5 Power Control CHK Car Home Kit pressure washer&prds=catalogid:13505040604876439150,productid:2709908216544238382,headlineOfferDocid:9200315737953743260,imageDocid:18049327867406015531,rds:PC_9690838211679561760|PROD_PC_9690838211679561760,gpcid:9690838211679561760,pvt:hg&hl=en&gl=us&udm=28",
       "currency": "USD",
-      "price": 488.99,
+      "price": 413.28,
       "status": "ok",
       "method": "serpapi",
-      "timestamp": "2026-09-02T15:51:07+00:00"
+      "timestamp": "2026-09-02T20:23:58+00:00"
     }
   ]
 }
