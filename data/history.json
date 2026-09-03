@@ -1582,5 +1582,23 @@
     "price": 413.28,
     "currency": "USD",
     "timestamp": "2026-09-03T02:32:21+00:00"
+  },
+  {
+    "retailer_id": "nfm",
+    "price": 489.99,
+    "currency": "USD",
+    "timestamp": "2026-09-03T10:32:34+00:00"
+  },
+  {
+    "retailer_id": "qvc",
+    "price": 559.99,
+    "currency": "USD",
+    "timestamp": "2026-09-03T10:32:34+00:00"
+  },
+  {
+    "retailer_id": "serp-martexplore-com",
+    "price": 413.28,
+    "currency": "USD",
+    "timestamp": "2026-09-03T10:32:43+00:00"
   }
 ]
