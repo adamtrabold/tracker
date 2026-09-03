@@ -23,27 +23,27 @@
       "k 5 fc"
     ]
   },
-  "updated_at": "2026-09-02T20:23:58+00:00",
+  "updated_at": "2026-09-03T02:32:21+00:00",
   "retailers": [
     {
       "retailer_id": "nfm",
       "name": "Nebraska Furniture Mart",
       "url": "https://www.nfm.com/karcher-k5-power-control-chk-2000-psi-electric-pressure-washer-w-car--home-kit-65358814/65358814.html",
       "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-09-02T20:23:56+00:00"
+      "price": 489.99,
+      "status": "ok",
+      "method": "json-ld+api",
+      "timestamp": "2026-09-03T02:32:14+00:00"
     },
     {
       "retailer_id": "qvc",
       "name": "QVC",
       "url": "https://www.qvc.com/karcher-k-5-power-control-chk-2000-psi-pressure-washer.product.H423035.html",
       "currency": "USD",
-      "price": null,
-      "status": "unavailable",
-      "method": null,
-      "timestamp": "2026-09-02T20:23:56+00:00"
+      "price": 559.99,
+      "status": "ok",
+      "method": "json-ld+api",
+      "timestamp": "2026-09-03T02:32:14+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -53,7 +53,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-09-02T20:23:56+00:00"
+      "timestamp": "2026-09-03T02:32:14+00:00"
     },
     {
       "retailer_id": "serp-martexplore-com",
@@ -63,7 +63,7 @@
       "price": 413.28,
       "status": "ok",
       "method": "serpapi",
-      "timestamp": "2026-09-02T20:23:58+00:00"
+      "timestamp": "2026-09-03T02:32:21+00:00"
     }
   ]
 }
