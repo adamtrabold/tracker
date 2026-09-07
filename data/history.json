@@ -1810,5 +1810,17 @@
     "price": 413.28,
     "currency": "USD",
     "timestamp": "2026-09-07T17:04:58+00:00"
+  },
+  {
+    "retailer_id": "nfm",
+    "price": 489.99,
+    "currency": "USD",
+    "timestamp": "2026-09-07T21:00:06+00:00"
+  },
+  {
+    "retailer_id": "serp-martexplore-com",
+    "price": 413.28,
+    "currency": "USD",
+    "timestamp": "2026-09-07T21:02:11+00:00"
   }
 ]
