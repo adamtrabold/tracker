@@ -1960,5 +1960,11 @@
     "price": 413.28,
     "currency": "USD",
     "timestamp": "2026-09-11T02:33:05+00:00"
+  },
+  {
+    "retailer_id": "nfm",
+    "price": 499.99,
+    "currency": "USD",
+    "timestamp": "2026-09-11T10:25:47+00:00"
   }
 ]
