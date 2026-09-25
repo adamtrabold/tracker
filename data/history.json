@@ -2470,5 +2470,11 @@
     "price": 499.99,
     "currency": "USD",
     "timestamp": "2026-09-25T16:19:24+00:00"
+  },
+  {
+    "retailer_id": "serp-mowers-at-jacks",
+    "price": 499.99,
+    "currency": "USD",
+    "timestamp": "2026-09-25T20:59:19+00:00"
   }
 ]
