@@ -2578,5 +2578,11 @@
     "price": 471.07,
     "currency": "USD",
     "timestamp": "2026-09-30T11:46:00+00:00"
+  },
+  {
+    "retailer_id": "serp-nfm",
+    "price": 471.07,
+    "currency": "USD",
+    "timestamp": "2026-09-30T17:25:59+00:00"
   }
 ]
