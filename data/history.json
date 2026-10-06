@@ -2824,5 +2824,23 @@
     "price": 413.28,
     "currency": "USD",
     "timestamp": "2026-10-05T23:36:07+00:00"
+  },
+  {
+    "retailer_id": "nfm",
+    "price": 471.07,
+    "currency": "USD",
+    "timestamp": "2026-10-06T04:20:49+00:00"
+  },
+  {
+    "retailer_id": "qvc",
+    "price": 559.99,
+    "currency": "USD",
+    "timestamp": "2026-10-06T04:20:49+00:00"
+  },
+  {
+    "retailer_id": "serp-martdiscover-com",
+    "price": 624.99,
+    "currency": "USD",
+    "timestamp": "2026-10-06T04:21:00+00:00"
   }
 ]
