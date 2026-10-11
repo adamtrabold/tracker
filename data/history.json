@@ -3040,5 +3040,11 @@
     "price": 413.28,
     "currency": "USD",
     "timestamp": "2026-10-10T21:03:08+00:00"
+  },
+  {
+    "retailer_id": "qvc",
+    "price": 559.99,
+    "currency": "USD",
+    "timestamp": "2026-10-11T03:25:10+00:00"
   }
 ]
