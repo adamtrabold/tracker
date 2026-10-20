@@ -23,7 +23,7 @@
       "k 5 fc"
     ]
   },
-  "updated_at": "2026-10-20T16:13:50+00:00",
+  "updated_at": "2026-10-20T21:10:49+00:00",
   "retailers": [
     {
       "retailer_id": "nfm",
@@ -33,17 +33,19 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-10-20T16:11:25+00:00"
+      "timestamp": "2026-10-20T21:08:18+00:00"
     },
     {
       "retailer_id": "qvc",
       "name": "QVC",
       "url": "https://www.qvc.com/karcher-k-5-power-control-chk-2000-psi-pressure-washer.product.H423035.html",
       "currency": "USD",
-      "price": 559.99,
-      "status": "ok",
-      "method": "json-ld+api",
-      "timestamp": "2026-10-20T16:11:25+00:00"
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-10-20T21:08:18+00:00",
+      "last_known_price": 559.99,
+      "last_known_at": "2026-10-20T16:11:25+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -53,7 +55,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-10-20T16:11:25+00:00"
+      "timestamp": "2026-10-20T21:08:18+00:00"
     }
   ]
 }
