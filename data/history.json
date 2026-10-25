@@ -3496,5 +3496,17 @@
     "price": 559.99,
     "currency": "USD",
     "timestamp": "2026-10-25T02:46:02+00:00"
+  },
+  {
+    "retailer_id": "qvc",
+    "price": 559.99,
+    "currency": "USD",
+    "timestamp": "2026-10-25T10:31:55+00:00"
+  },
+  {
+    "retailer_id": "serp-martexplore-com",
+    "price": 413.28,
+    "currency": "USD",
+    "timestamp": "2026-10-25T10:34:29+00:00"
   }
 ]
