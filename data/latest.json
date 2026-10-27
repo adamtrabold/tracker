@@ -23,7 +23,7 @@
       "k 5 fc"
     ]
   },
-  "updated_at": "2026-10-26T22:11:43+00:00",
+  "updated_at": "2026-10-27T03:18:30+00:00",
   "retailers": [
     {
       "retailer_id": "nfm",
@@ -33,17 +33,19 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-10-26T22:11:01+00:00"
+      "timestamp": "2026-10-27T03:18:29+00:00"
     },
     {
       "retailer_id": "qvc",
       "name": "QVC",
       "url": "https://www.qvc.com/karcher-k-5-power-control-chk-2000-psi-pressure-washer.product.H423035.html",
       "currency": "USD",
-      "price": 559.99,
-      "status": "ok",
-      "method": "json-ld+api",
-      "timestamp": "2026-10-26T22:11:01+00:00"
+      "price": null,
+      "status": "unavailable",
+      "method": null,
+      "timestamp": "2026-10-27T03:18:29+00:00",
+      "last_known_price": 559.99,
+      "last_known_at": "2026-10-26T22:11:01+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -53,7 +55,17 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-10-26T22:11:01+00:00"
+      "timestamp": "2026-10-27T03:18:29+00:00"
+    },
+    {
+      "retailer_id": "serp-martexplore-com",
+      "name": "Martexplore.com",
+      "url": "https://www.google.com/search?ibp=oshop&q=Karcher K5 Power Control CHK Car Home Kit pressure washer&prds=catalogid:13505040604876439150,productid:2709908216544238382,headlineOfferDocid:9200315737953743260,imageDocid:18049327867406015531,rds:PC_9690838211679561760|PROD_PC_9690838211679561760,gpcid:9690838211679561760,mid:576462810707667506,pvt:hg&hl=en&gl=us&udm=28",
+      "currency": "USD",
+      "price": 413.28,
+      "status": "ok",
+      "method": "serpapi",
+      "timestamp": "2026-10-27T03:18:30+00:00"
     }
   ]
 }
