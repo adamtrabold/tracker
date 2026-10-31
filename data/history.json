@@ -3622,5 +3622,11 @@
     "price": 413.28,
     "currency": "USD",
     "timestamp": "2026-10-31T03:41:29+00:00"
+  },
+  {
+    "retailer_id": "serp-martexplore-com",
+    "price": 413.28,
+    "currency": "USD",
+    "timestamp": "2026-10-31T11:33:03+00:00"
   }
 ]
