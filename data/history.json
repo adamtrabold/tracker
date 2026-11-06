@@ -3766,5 +3766,17 @@
     "price": 413.28,
     "currency": "USD",
     "timestamp": "2026-11-06T04:53:06+00:00"
+  },
+  {
+    "retailer_id": "qvc",
+    "price": 559.99,
+    "currency": "USD",
+    "timestamp": "2026-11-06T13:36:09+00:00"
+  },
+  {
+    "retailer_id": "serp-steambrite-supply",
+    "price": 499.99,
+    "currency": "USD",
+    "timestamp": "2026-11-06T13:38:24+00:00"
   }
 ]
