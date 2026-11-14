@@ -23,7 +23,7 @@
       "k 5 fc"
     ]
   },
-  "updated_at": "2026-11-13T23:11:39+00:00",
+  "updated_at": "2026-11-14T04:36:05+00:00",
   "retailers": [
     {
       "retailer_id": "nfm",
@@ -33,7 +33,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-11-13T23:08:24+00:00"
+      "timestamp": "2026-11-14T04:32:13+00:00"
     },
     {
       "retailer_id": "qvc",
@@ -43,7 +43,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-11-13T23:08:24+00:00"
+      "timestamp": "2026-11-14T04:32:13+00:00"
     },
     {
       "retailer_id": "bestbuy",
@@ -53,7 +53,7 @@
       "price": null,
       "status": "unavailable",
       "method": null,
-      "timestamp": "2026-11-13T23:08:24+00:00"
+      "timestamp": "2026-11-14T04:32:13+00:00"
     },
     {
       "retailer_id": "serp-steambrite-supply",
@@ -63,7 +63,7 @@
       "price": 499.99,
       "status": "ok",
       "method": "serpapi",
-      "timestamp": "2026-11-13T23:11:39+00:00"
+      "timestamp": "2026-11-14T04:36:05+00:00"
     }
   ]
 }
